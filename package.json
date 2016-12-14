@@ -1,0 +1,31 @@
+{
+  "name": "scim-query-filter-parser-js",
+  "version": "1.0.0",
+  "description": "Parser for SCIM Filter Query Strings",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "node_modules/mocha/bin/mocha test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-control-group/scim-query-filter-parser-js.git"
+  },
+  "keywords": [
+    "scim",
+    "scimplecloud",
+    "parser",
+    "filter"
+  ],
+  "author": "Mike Marcacci <mike.marcacci@thecontrolgroup.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/the-control-group/scim-query-filter-parser-js/issues"
+  },
+  "homepage": "https://github.com/the-control-group/scim-query-filter-parser-js#readme",
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0"
+  }
+}
