@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/the-control-group/scim-query-filter-parser-js.svg?branch=master)](https://travis-ci.org/the-control-group/scim-query-filter-parser-js)
+
 Synopsis
 --------
 
