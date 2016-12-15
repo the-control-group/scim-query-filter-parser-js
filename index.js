@@ -29,10 +29,10 @@ const NEXT_TOKEN = new RegExp(`^(${PAREN}|${STR}|${OP}|${WORD})${SEP}`);
 const IS_OPERATOR = new RegExp(`^(?:${OP})$`);
 
 
-// Query
-// -----
+// Filter
+// ------
 
-class Query {
+class Filter {
 
 	constructor (input) {
 		this.input = input;
@@ -156,4 +156,4 @@ class Query {
 
 }
 
-module.exports = Query;
+module.exports = Filter;

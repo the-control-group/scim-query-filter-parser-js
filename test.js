@@ -1,7 +1,10 @@
 'use strict';
 
 const assert = require('assert');
-const Query = require('./index');
+const Filter = require('./index');
+
+// Specification and examples are defined here:
+// http://www.simplecloud.info/specs/draft-scim-api-01.html#rfc.section.3.2.2.1
 
 [
 	{
@@ -66,9 +69,9 @@ const Query = require('./index');
 	}
 ].forEach((test) => {
 	describe(test.string, () => {
-		var query;
-		before(() => query = new Query(test.string));
-		it('should parse into an RPN stack', () => assert.deepEqual(query.rpn, test.rpn));
-		it('should parse into an AST', () => assert.deepEqual(query.tree, test.tree));
+		var filter;
+		before(() => filter = new Filter(test.string));
+		it('should parse into an RPN stack', () => assert.deepEqual(filter.rpn, test.rpn));
+		it('should parse into an expression tree', () => assert.deepEqual(filter.tree, test.tree));
 	});
 });

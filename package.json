@@ -1,5 +1,5 @@
 {
-  "name": "scim-query-filter-parser-js",
+  "name": "scim-query-filter-parser",
   "version": "1.0.0",
   "description": "Parser for SCIM Filter Query Strings",
   "main": "index.js",
