@@ -37,6 +37,11 @@ describe('new Filter() [case-sensitive]', () => {
 			tree: ['eq', 'userName','bjensen']
 		},
 		{
+			string: 'operation eq "overlord" and priority eq "high"',
+			rpn: [ 'operation', 'overlord', 'eq', 'priority', 'high', 'eq', 'and' ],
+			tree: [ 'and', [ 'eq', 'operation', 'overlord' ], [ 'eq', 'priority', 'high' ] ]
+		},
+		{
 			string: 'active eq true',
 			rpn: ['active', true, 'eq'],
 			tree: ['eq', 'active', true]
