@@ -21,7 +21,7 @@ const STR = '"(?:\\\\"|[^"])*"';
 const OP = `${Object.keys(OPS).join('|')}`;
 const WORD = '[\\w\\.]+';
 const SEP = '\\s?';
-const NEXT_TOKEN = new RegExp(`^(${PAREN}|${STR}|${OP}|${WORD})${SEP}`);
+const NEXT_TOKEN = new RegExp(`^(${PAREN}|${STR}|${WORD})${SEP}`);
 const IS_OPERATOR = new RegExp(`^(?:${OP})$`);
 
 
@@ -176,7 +176,7 @@ class Filter {
 	static applyOperation (path, resource, op) {
 		var value = this.traverse(path, resource);
 
-		if (Array.isArray(value)) 
+		if (Array.isArray(value))
 			return value.some((item) => {
 				var value = typeof item.value === 'string' ? item.value.toLowerCase() : item.value;
 				return op(value);
