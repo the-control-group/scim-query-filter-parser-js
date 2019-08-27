@@ -41,6 +41,11 @@ describe('new Filter() [case-sensitive]', () => {
 			rpn: ['active', true, 'eq'],
 			tree: ['eq', 'active', true]
 		},
+    {
+      string: 'organization eq "hello"',
+      rpn: ['organization', 'hello', 'eq'],
+      tree: ['eq', 'organization', 'hello']
+    },
 		{
 			string: 'name.familyName co "O\'Malley"',
 			rpn: ['name.familyName', 'O\'Malley', 'co'],
@@ -118,6 +123,11 @@ describe('new Filter() [case-insensitive]', () => {
 			rpn: ['active', true, 'eq'],
 			tree: ['eq', 'active', true]
 		},
+    {
+      string: 'organization eq "hello"',
+      rpn: ['organization', 'hello', 'eq'],
+      tree: ['eq', 'organization', 'hello']
+    },
 		{
 			string: 'name.familyname co "o\'malley"',
 			rpn: ['name.familyname', 'o\'malley', 'co'],

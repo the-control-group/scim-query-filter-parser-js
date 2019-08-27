@@ -21,7 +21,7 @@ const STR = '"(?:\\\\"|[^"])*"';
 const OP = `${Object.keys(OPS).join('|')}`;
 const WORD = '[\\w\\.]+';
 const SEP = '\\s?';
-const NEXT_TOKEN = new RegExp(`^(${PAREN}|${STR}|${OP}|${WORD})${SEP}`);
+const NEXT_TOKEN = new RegExp(`^(${PAREN}|${STR}|${WORD})${SEP}`);
 const IS_OPERATOR = new RegExp(`^(?:${OP})$`);
 
 
