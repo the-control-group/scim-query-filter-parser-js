@@ -2,7 +2,7 @@ import { parser as Parser, ast as Ast } from "apg-lib";
 import Grammar from "../grammar.js";
 
 import { Yard } from "./Yard";
-import { traverse } from "./util";
+import { extractSortValue } from "./util";
 
 import { filter } from "./filter";
 import { expression } from "./expression";
@@ -82,65 +82,45 @@ export function parseAttributePath(input: string): string[] {
   return yard.tracks.attributePath[0];
 }
 
-function extractSortValue(path: string[], data: any): any {
-  const raw = traverse(path, data);
-  const normalized: any[] = [];
-  for (let i = 0; i <= raw.length; i++) {
-    const x = raw[i];
-
-    // Use a scalar value.
-    if (
-      typeof x === "string" ||
-      typeof x === "number" ||
-      typeof x === "boolean"
-    ) {
-      if (
-        Object.prototype.propertyIsEnumerable.call(x, "primary") &&
-        (x as any).primary === true
-      ) {
-        return x;
-      }
-
-      normalized.push(x);
-      continue;
-    }
-
-    // Descend into the "value" attribute of a "multi-value" object.
-    if (
-      typeof x === "object" &&
-      x &&
-      Object.prototype.propertyIsEnumerable.call(x, "value")
-    ) {
-      const v = (x as any).value;
-      if (
-        typeof v === "string" ||
-        typeof v === "number" ||
-        typeof v === "boolean"
-      ) {
-        // If one is marked as primary, use this one.
-        if (
-          Object.prototype.propertyIsEnumerable.call(x, "primary") &&
-          (x as any).primary === true
-        ) {
-          return v;
-        }
-
-        normalized.push(v);
-        continue;
-      }
-    }
-  }
-
-  // If we didn't encounter a "primary" value, return the first one.
-  return normalized[0];
-}
-
 export function compileSorter(input: string): (a: any, b: any) => -1 | 0 | 1 {
   const path = parseAttributePath(input);
-  return (a: any, b: any): -1 | 0 | 1 => {
-    const aValue = extractSortValue(path, a);
-    const bValue = extractSortValue(path, b);
-    return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+  return (objectA: any, objectB: any): -1 | 0 | 1 => {
+    const a = extractSortValue(path, objectA);
+    const b = extractSortValue(path, objectB);
+
+    if (a === b) {
+      return 0;
+    }
+
+    if (a === undefined || a === null) {
+      return -1;
+    }
+
+    if (b === undefined || b === null) {
+      return 1;
+    }
+
+    if (typeof a === typeof b) {
+      return a > b ? 1 : a < b ? -1 : 0;
+    }
+
+    if (typeof a === "boolean") {
+      return -1;
+    }
+
+    if (typeof b === "boolean") {
+      return 1;
+    }
+
+    if (typeof a === "number") {
+      return -1;
+    }
+
+    if (typeof b === "number") {
+      return 1;
+    }
+
+    return 0;
   };
 }
 

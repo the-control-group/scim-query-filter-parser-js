@@ -1,5 +1,5 @@
 import test from "ava";
-import { compileFilter } from "./index";
+import { compileFilter, compileSorter } from "./index";
 
 // Specification and examples are defined here:
 // https://tools.ietf.org/html/rfc7644#section-3.4.2.2
@@ -246,4 +246,21 @@ test("compileFilter() - attribute groups limit distributivity", t => {
   t.deepEqual(results.map(({ id }) => id), [
     "7fe14935-f678-4aeb-a21c-748924f4e6f9"
   ]);
+});
+
+test("compileSorter() - ", t => {
+  const sorter = compileSorter("foo.bar");
+  const results = [
+    { id: 10, foo: [{ bar: [3] }] },
+    { id: 9, foo: { bar: [{ value: "a" }, { value: "g", primary: true }] } },
+    { id: 8, foo: { bar: [{ value: "c" }] } },
+    { id: 7, foo: { bar: ["x", "e"] } },
+    { id: 6, foo: { bar: ["b"] } },
+    { id: 5, foo: { bar: [2] } },
+    { id: 4, foo: { bar: "a" } },
+    { id: 3, foo: { bar: 1 } },
+    { id: 2, foo: {} },
+    { id: 1 }
+  ].sort(sorter);
+  t.deepEqual(results.map(({ id }) => id), [2, 1, 3, 5, 10, 4, 6, 8, 9, 7]);
 });
