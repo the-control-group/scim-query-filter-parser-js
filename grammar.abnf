@@ -1,0 +1,144 @@
+filter = infixLogicalExpression / expression
+
+expression = precedenceGroup / attributeGroup / prefixLogicalExpression / postfixAssertion / infixAssertion
+
+precedenceGroup = "(" filter ")"
+
+attributeGroup = attributePath "[" filter "]"
+
+prefixLogicalExpression = prefixLogicalExpressionOperator precedenceGroup
+prefixLogicalExpressionOperator = "not"
+
+infixLogicalExpression = expression 1*infixLogicalExpressionPredicate
+infixLogicalExpressionPredicate = (SP infixLogicalExpressionOperator SP expression)
+infixLogicalExpressionOperator = "and" / "or"
+
+postfixAssertion = attributePath SP postfixAssertionOperator
+postfixAssertionOperator = "pr"
+
+infixAssertion = attributePath SP infixAssertionOperator SP infixAssertionValue
+infixAssertionOperator = "eq" / "ne" / "co" / "sw" / "ew" / "gt" / "lt" / "ge" / "le"
+infixAssertionValue = null / true / false / number / string
+
+attributePath = [URI ":"] attributePathSegment *("." attributePathSegment)
+attributePathSegment  = ALPHA *("-" / "_" / DIGIT / ALPHA)
+
+; rfc7159
+false         = %x66.61.6c.73.65               ; false
+null          = %x6e.75.6c.6c                  ; null
+true          = %x74.72.75.65                  ; true
+number        = [ minus ] int [ frac ] [ exp ]
+decimal-point = %x2E                           ; .
+digit1-9      = %x31-39                        ; 1-9
+e             = %x65 / %x45                    ; e E
+exp           = e [ minus / plus ] 1*DIGIT
+frac          = decimal-point 1*DIGIT
+int           = zero / ( digit1-9 *DIGIT )
+minus         = %x2D                           ; -
+plus          = %x2B                           ; +
+zero          = %x30                           ; 0
+string = quotation-mark *char quotation-mark
+char = unescaped /
+    escape (
+        %x22 /          ; "    quotation mark  U+0022
+        %x5C /          ; \    reverse solidus U+005C
+        %x2F /          ; /    solidus         U+002F
+        %x62 /          ; b    backspace       U+0008
+        %x66 /          ; f    form feed       U+000C
+        %x6E /          ; n    line feed       U+000A
+        %x72 /          ; r    carriage return U+000D
+        %x74 /          ; t    tab             U+0009
+        %x75 4HEXDIG )  ; uXXXX                U+XXXX
+
+escape = %x5C              ; \
+quotation-mark = %x22      ; "
+unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
+
+; rfc3986
+URI           = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
+
+hier-part     = "//" authority path-abempty
+              / path-absolute
+              / path-rootless
+              / path-empty
+
+URI-reference = URI / relative-ref
+
+absolute-URI  = scheme ":" hier-part [ "?" query ]
+
+relative-ref  = relative-part [ "?" query ] [ "#" fragment ]
+
+relative-part = "//" authority path-abempty
+              / path-absolute
+              / path-noscheme
+              / path-empty
+
+scheme        = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+
+authority     = [ userinfo "@" ] host [ ":" port ]
+userinfo      = *( unreserved / pct-encoded / sub-delims / ":" )
+host          = IP-literal / IPv4address / reg-name
+port          = *DIGIT
+
+IP-literal    = "[" ( IPv6address / IPvFuture  ) "]"
+
+IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
+
+IPv6address   =                            6( h16 ":" ) ls32
+              /                       "::" 5( h16 ":" ) ls32
+              / [               h16 ] "::" 4( h16 ":" ) ls32
+              / [ *1( h16 ":" ) h16 ] "::" 3( h16 ":" ) ls32
+              / [ *2( h16 ":" ) h16 ] "::" 2( h16 ":" ) ls32
+              / [ *3( h16 ":" ) h16 ] "::"    h16 ":"   ls32
+              / [ *4( h16 ":" ) h16 ] "::"              ls32
+              / [ *5( h16 ":" ) h16 ] "::"              h16
+              / [ *6( h16 ":" ) h16 ] "::"
+
+h16           = 1*4HEXDIG
+ls32          = ( h16 ":" h16 ) / IPv4address
+IPv4address   = dec-octet "." dec-octet "." dec-octet "." dec-octet
+
+dec-octet     = DIGIT                 ; 0-9
+              / %x31-39 DIGIT         ; 10-99
+              / "1" 2DIGIT            ; 100-199
+              / "2" %x30-34 DIGIT     ; 200-249
+              / "25" %x30-35          ; 250-255
+
+reg-name      = *( unreserved / pct-encoded / sub-delims )
+
+path          = path-abempty    ; begins with "/" or is empty
+              / path-absolute   ; begins with "/" but not "//"
+              / path-noscheme   ; begins with a non-colon segment
+              / path-rootless   ; begins with a segment
+              / path-empty      ; zero characters
+
+path-abempty  = *( "/" segment )
+path-absolute = "/" [ segment-nz *( "/" segment ) ]
+path-noscheme = segment-nz-nc *( "/" segment )
+path-rootless = segment-nz *( "/" segment )
+path-empty    = 0pchar ; modified from "path-empty    = 0<pchar>"
+
+segment       = *pchar
+segment-nz    = 1*pchar
+segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
+              ; non-zero-length segment without any colon ":"
+
+pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+
+query         = *( pchar / "/" / "?" )
+
+fragment      = *( pchar / "/" / "?" )
+
+pct-encoded   = "%" HEXDIG HEXDIG
+
+unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+reserved      = gen-delims / sub-delims
+gen-delims    = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+              / "*" / "+" / "," / ";" / "="
+
+; rfc5234
+ALPHA          =  %x41-5A / %x61-7A   ; A-Z / a-z
+SP             =  %x20
+DIGIT          =  %x30-39
+HEXDIG         =  DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
