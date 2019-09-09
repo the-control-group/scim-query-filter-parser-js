@@ -7,7 +7,12 @@ export function traverse(path: string[], resource: any): unknown {
 
     // Do a case-insensitive lookup of keys.
     const segment = path[i].toLowerCase();
-    cursor = Object.keys(cursor).find(key => key.toLowerCase() === segment);
+    const key = Object.keys(cursor).find(key => key.toLowerCase() === segment);
+    if (key == undefined) {
+      return undefined;
+    }
+
+    cursor = cursor[key];
   }
 
   return cursor;

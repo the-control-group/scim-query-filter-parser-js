@@ -6,6 +6,7 @@ import { traverse } from "./util";
 // String.prototype.localeCompare()
 
 function eq(path: string[], value: any, data: any): boolean {
+  console.log(traverse(path, data));
   return traverse(path, data) === value;
 }
 
