@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2018"],
+    "target": "es2018",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "baseUrl": "",
+    "paths": {
+      "apg-lib": ["@types/apg-lib"],
+      "apg-lib/*": ["@types/apg-lib/*"]
+    }
+  },
+  "include": ["./src/**/*"]
+}
