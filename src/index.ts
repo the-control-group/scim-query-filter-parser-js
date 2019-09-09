@@ -2,6 +2,7 @@ import { parser as Parser, ast as Ast } from "apg-lib";
 import Grammar from "../grammar.js";
 
 import { Yard } from "./Yard";
+import { traverse } from "./util";
 
 import { filter } from "./filter";
 import { expression } from "./expression";
@@ -41,7 +42,7 @@ parser.ast.callbacks = {
   attributePathSegment
 };
 
-export default function compile(input: string): (data: any) => boolean {
+export function compileFilter(input: string): (data: any) => boolean {
   // Parse the filter
   const parseResult = parser.parse(grammar, "filter", input);
   if (!parseResult.success) {
@@ -59,6 +60,88 @@ export default function compile(input: string): (data: any) => boolean {
   }
 
   return yard.tracks.filter[0];
+}
+
+export function parseAttributePath(input: string): string[] {
+  // Parse the attributePath
+  const parseResult = parser.parse(grammar, "attributePath", input);
+  if (!parseResult.success) {
+    throw new Error("Failed to parse!");
+  }
+
+  // Compile the attributePath
+  const yard = new Yard();
+  parser.ast.translate(yard);
+
+  if (yard.tracks.attributePath.length !== 1) {
+    throw new Error(
+      `INVARIANT: Expected 1 attributePath, but got ${yard.tracks.attributePath.length};`
+    );
+  }
+
+  return yard.tracks.attributePath[0];
+}
+
+function extractSortValue(path: string[], data: any): any {
+  const raw = traverse(path, data);
+  const normalized: any[] = [];
+  for (let i = 0; i <= raw.length; i++) {
+    const x = raw[i];
+
+    // Use a scalar value.
+    if (
+      typeof x === "string" ||
+      typeof x === "number" ||
+      typeof x === "boolean"
+    ) {
+      if (
+        Object.prototype.propertyIsEnumerable.call(x, "primary") &&
+        (x as any).primary === true
+      ) {
+        return x;
+      }
+
+      normalized.push(x);
+      continue;
+    }
+
+    // Descend into the "value" attribute of a "multi-value" object.
+    if (
+      typeof x === "object" &&
+      x &&
+      Object.prototype.propertyIsEnumerable.call(x, "value")
+    ) {
+      const v = (x as any).value;
+      if (
+        typeof v === "string" ||
+        typeof v === "number" ||
+        typeof v === "boolean"
+      ) {
+        // If one is marked as primary, use this one.
+        if (
+          Object.prototype.propertyIsEnumerable.call(x, "primary") &&
+          (x as any).primary === true
+        ) {
+          return v;
+        }
+
+        normalized.push(v);
+        continue;
+      }
+    }
+  }
+
+  // If we didn't encounter a "primary" value, return the first one.
+  return normalized[0];
+}
+
+export function compileSorter(input: string): (a: any, b: any) => -1 | 0 | 1 {
+  const path = parseAttributePath(input);
+  return (a: any, b: any): -1 | 0 | 1 => {
+    const aValue = extractSortValue(path, a);
+    const bValue = extractSortValue(path, b);
+    return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+  };
 }
 
 // TODO: add a way to pass in a schema definition, in the format used in
