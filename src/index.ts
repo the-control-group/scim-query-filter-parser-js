@@ -123,16 +123,3 @@ export function compileSorter(input: string): (a: any, b: any) => -1 | 0 | 1 {
     return 0;
   };
 }
-
-// TODO: add a way to pass in a schema definition, in the format used in
-// https://tools.ietf.org/html/rfc7643
-//
-// Traverse this schema definition as the data is traversed, and use it to make
-// decisions case sensitivity, etc.
-
-// compile('foo eq "foo" or bar eq "bar"');
-// compile('foo eq "foo" and bar eq "bar"');
-// compile('foo eq "foo" or bar eq "bar" and baz eq "baz"');
-// compile('foo eq "foo" and bar eq "bar" or baz eq "baz"');
-// compile('foo eq "foo" or bar eq "bar" and baz eq "baz" or rap eq "rap"');
-// compile('foo eq "foo" and bar eq "bar" or baz eq "baz" and rap eq "rap"');
