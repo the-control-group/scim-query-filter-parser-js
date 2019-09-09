@@ -11,7 +11,12 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": "",
+    "paths": {
+      "apg-lib": ["@types/apg-lib"],
+      "apg-lib/*": ["@types/apg-lib/*"]
+    }
   },
   "include": ["./src/**/*"]
 }

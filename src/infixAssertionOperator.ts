@@ -172,19 +172,19 @@ const map = {
 };
 
 export function infixAssertionOperator(
-  state: ids.SEM_PRE | ids.SEM_POST,
+  state: typeof ids.SEM_PRE | typeof ids.SEM_POST,
   chars: number[],
   phraseIndex: number,
   phraseLength: number,
   yard: Yard
-): ids.SEM_OK | ids.SEM_SKIP {
+): typeof ids.SEM_OK | typeof ids.SEM_SKIP {
   switch (state) {
     case ids.SEM_PRE:
       break;
 
     case ids.SEM_POST:
       const op = utils
-        .charsToString(chars, phraseIndex, phraseLength, yard)
+        .charsToString(chars, phraseIndex, phraseLength)
         .toLowerCase();
       const fn = map[op as keyof typeof map];
       if (!fn) {
