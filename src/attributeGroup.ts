@@ -30,9 +30,7 @@ export function attributeGroup(
       }
 
       yard.tracks.attributeGroup.push((data: any) =>
-        traverse(attributePath[0], data).some(x =>
-          Array.isArray(x) ? x.some(y => filter[0](y)) : filter[0](x)
-        )
+        traverse(attributePath[0], data).some(x => filter[0](x))
       );
 
       break;

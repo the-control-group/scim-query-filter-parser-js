@@ -52,6 +52,12 @@ export default function compile(input: string): (data: any) => boolean {
   const yard = new Yard();
   parser.ast.translate(yard);
 
+  if (yard.tracks.filter.length !== 1) {
+    throw new Error(
+      `INVARIANT: Expected 1 filter, but got ${yard.tracks.filter.length};`
+    );
+  }
+
   return yard.tracks.filter[0];
 }
 

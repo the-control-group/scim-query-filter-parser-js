@@ -221,6 +221,14 @@ test("matches on any matching multi-value attributes", t => {
   ]);
 });
 
+test("matches on any matching multi-value attributes with shorthand notation", t => {
+  const filter = compile('emails eq "crouppulled@example.org"');
+  const results = db.filter(filter);
+  t.deepEqual(results.map(({ id }) => id), [
+    "75d350df-e2be-4f09-9c9a-f16f510e18b5"
+  ]);
+});
+
 test("matching of multi-value attributes is distributive", t => {
   const filter = compile('emails[primary eq true] and emails[type eq "home"]');
   const results = db.filter(filter);

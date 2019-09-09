@@ -23,5 +23,5 @@ export function traverse(path: string[], resource: any): unknown[] {
     return traverse(remaining, value);
   }
 
-  return [value];
+  return Array.isArray(value) ? value : [value];
 }

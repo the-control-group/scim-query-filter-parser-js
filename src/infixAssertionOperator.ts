@@ -6,68 +6,157 @@ import { traverse } from "./util";
 // String.prototype.localeCompare()
 
 function eq(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    x =>
-      x === value ||
-      (typeof x === "string" &&
-        typeof value === "string" &&
-        value.localeCompare(x, undefined, { sensitivity: "base" }) === 0)
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return typeof v === "string" && typeof value === "string"
+      ? value.localeCompare(v, undefined, { sensitivity: "base" }) === 0
+      : v === value;
+  });
 }
 
 function ne(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    x =>
-      x !== value ||
-      (typeof x === "string" &&
-        typeof value === "string" &&
-        value.localeCompare(x, undefined, { sensitivity: "base" }) === 0)
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return typeof v === "string" && typeof value === "string"
+      ? value.localeCompare(v, undefined, { sensitivity: "base" }) !== 0
+      : v !== value;
+  });
 }
 
 function co(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    x => typeof x === "string" && x.includes(value)
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return typeof v === "string" && v.includes(value);
+  });
 }
 
 function sw(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    x => typeof x === "string" && x.substring(0, value.length) === value
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return typeof v === "string" && v.substring(0, value.length) === value;
+  });
 }
 
 function ew(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    x =>
-      typeof x === "string" &&
-      x.length >= value.length &&
-      x.substring(x.length - value.length) === value
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return (
+      typeof v === "string" &&
+      v.length >= value.length &&
+      v.substring(v.length - value.length) === value
+    );
+  });
 }
 
 function gt(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    (x: any) => typeof x === typeof value && x > value
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return v > value;
+  });
 }
 
 function ge(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    (x: any) => typeof x === typeof value && x >= value
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return v >= value;
+  });
 }
 
 function lt(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    (x: any) => typeof x === typeof value && x < value
-  );
+  return traverse(path, data).some((x: any) => {
+    const v =
+      typeof x === typeof value
+        ? x
+        : typeof x === "object" &&
+          x &&
+          Object.prototype.propertyIsEnumerable.call(x, "value") &&
+          typeof x.value == typeof value
+        ? x.value
+        : undefined;
+
+    return v < value;
+  });
 }
 
 function le(path: string[], value: any, data: any): boolean {
-  return traverse(path, data).some(
-    (x: any) => typeof x === typeof value && x <= value
-  );
+  return traverse(path, data).some((x: any) => {
+    {
+      const v =
+        typeof x === typeof value
+          ? x
+          : typeof x === "object" &&
+            x &&
+            Object.prototype.propertyIsEnumerable.call(x, "value") &&
+            typeof x.value == typeof value
+          ? x.value
+          : undefined;
+
+      return v <= value;
+    }
+  });
 }
 
 const map = {
