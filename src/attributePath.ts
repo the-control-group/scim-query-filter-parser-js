@@ -15,7 +15,14 @@ export function attributePath(
 
     case ids.SEM_POST:
       const { attributePathSegment } = yard.post("attributePath");
-      yard.tracks.attributePath.push(attributePathSegment);
+
+      if (attributePathSegment.length < 1) {
+        throw new Error(
+          `INVARIANT: Expected 1 or more attributePathSegment, but got ${attributePathSegment.length};`
+        );
+      }
+
+      yard.tracks.attributePath.push(attributePathSegment.reverse());
       break;
   }
 

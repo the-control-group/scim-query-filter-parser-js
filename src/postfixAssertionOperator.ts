@@ -6,7 +6,7 @@ import { traverse } from "./util";
 // String.prototype.localeCompare()
 
 function pr(path: string[], data: any): boolean {
-  return traverse(path, data) !== undefined;
+  return traverse(path, data).some(x => x !== undefined);
 }
 
 const map = {
@@ -25,7 +25,9 @@ export function postfixAssertionOperator(
       break;
 
     case ids.SEM_POST:
-      const op = utils.charsToString(chars, phraseIndex, phraseLength, yard);
+      const op = utils
+        .charsToString(chars, phraseIndex, phraseLength, yard)
+        .toLowerCase();
       const fn = map[op as keyof typeof map];
       if (!fn) {
         throw new Error(

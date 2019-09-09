@@ -6,49 +6,68 @@ import { traverse } from "./util";
 // String.prototype.localeCompare()
 
 function eq(path: string[], value: any, data: any): boolean {
-  console.log(traverse(path, data));
-  return traverse(path, data) === value;
+  return traverse(path, data).some(
+    x =>
+      x === value ||
+      (typeof x === "string" &&
+        typeof value === "string" &&
+        value.localeCompare(x, undefined, { sensitivity: "base" }) === 0)
+  );
 }
 
 function ne(path: string[], value: any, data: any): boolean {
-  return traverse(path, data) !== value;
+  return traverse(path, data).some(
+    x =>
+      x !== value ||
+      (typeof x === "string" &&
+        typeof value === "string" &&
+        value.localeCompare(x, undefined, { sensitivity: "base" }) === 0)
+  );
 }
 
 function co(path: string[], value: any, data: any): boolean {
-  const actual = traverse(path, data);
-  return typeof actual === "string" && actual.includes(value);
+  return traverse(path, data).some(
+    x => typeof x === "string" && x.includes(value)
+  );
 }
 
 function sw(path: string[], value: any, data: any): boolean {
-  const actual = traverse(path, data);
-  return (
-    typeof actual === "string" && actual.substring(0, value.length) === value
+  return traverse(path, data).some(
+    x => typeof x === "string" && x.substring(0, value.length) === value
   );
 }
 
 function ew(path: string[], value: any, data: any): boolean {
-  const actual = traverse(path, data);
-  return (
-    typeof actual === "string" &&
-    actual.length >= value.length &&
-    actual.substring(actual.length - value.length) === value
+  return traverse(path, data).some(
+    x =>
+      typeof x === "string" &&
+      x.length >= value.length &&
+      x.substring(x.length - value.length) === value
   );
 }
 
 function gt(path: string[], value: any, data: any): boolean {
-  return (traverse(path, data) as any) > value;
+  return traverse(path, data).some(
+    (x: any) => typeof x === typeof value && x > value
+  );
 }
 
 function ge(path: string[], value: any, data: any): boolean {
-  return (traverse(path, data) as any) >= value;
+  return traverse(path, data).some(
+    (x: any) => typeof x === typeof value && x >= value
+  );
 }
 
 function lt(path: string[], value: any, data: any): boolean {
-  return (traverse(path, data) as any) < value;
+  return traverse(path, data).some(
+    (x: any) => typeof x === typeof value && x < value
+  );
 }
 
 function le(path: string[], value: any, data: any): boolean {
-  return (traverse(path, data) as any) <= value;
+  return traverse(path, data).some(
+    (x: any) => typeof x === typeof value && x <= value
+  );
 }
 
 const map = {
@@ -75,7 +94,9 @@ export function infixAssertionOperator(
       break;
 
     case ids.SEM_POST:
-      const op = utils.charsToString(chars, phraseIndex, phraseLength, yard);
+      const op = utils
+        .charsToString(chars, phraseIndex, phraseLength, yard)
+        .toLowerCase();
       const fn = map[op as keyof typeof map];
       if (!fn) {
         throw new Error(

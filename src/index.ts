@@ -45,7 +45,6 @@ export default function compile(input: string): (data: any) => boolean {
   // Parse the filter
   const parseResult = parser.parse(grammar, "filter", input);
   if (!parseResult.success) {
-    console.log(parseResult);
     throw new Error("Failed to parse!");
   }
 
@@ -56,18 +55,15 @@ export default function compile(input: string): (data: any) => boolean {
   return yard.tracks.filter[0];
 }
 
-compile('foo eq "foo" or bar eq "bar"');
-compile('foo eq "foo" and bar eq "bar"');
-compile('foo eq "foo" or bar eq "bar" and baz eq "baz"');
-compile('foo eq "foo" and bar eq "bar" or baz eq "baz"');
-compile('foo eq "foo" or bar eq "bar" and baz eq "baz" or rap eq "rap"');
-compile('foo eq "foo" and bar eq "bar" or baz eq "baz" and rap eq "rap"');
+// TODO: add a way to pass in a schema definition, in the format used in
+// https://tools.ietf.org/html/rfc7643
+//
+// Traverse this schema definition as the data is traversed, and use it to make
+// decisions case sensitivity, etc.
 
-// // compile('userType eq "Employee" and enabled eq true and admin eq false');
-// compile(
-//   'userType eq "Employee" and enabled eq true or admin eq false and other = 123'
-// );
-// // compile('userType eq "Employee" or enabled eq true or admin eq false');
-// compile(
-//   'userType eq "Employee" or enabled eq true and admin eq false or other = 123'
-// );
+// compile('foo eq "foo" or bar eq "bar"');
+// compile('foo eq "foo" and bar eq "bar"');
+// compile('foo eq "foo" or bar eq "bar" and baz eq "baz"');
+// compile('foo eq "foo" and bar eq "bar" or baz eq "baz"');
+// compile('foo eq "foo" or bar eq "bar" and baz eq "baz" or rap eq "rap"');
+// compile('foo eq "foo" and bar eq "bar" or baz eq "baz" and rap eq "rap"');

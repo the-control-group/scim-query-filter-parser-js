@@ -14,15 +14,15 @@ export function precedenceGroup(
       break;
 
     case ids.SEM_POST:
-      const { expression } = yard.post("precedenceGroup");
+      const { filter } = yard.post("precedenceGroup");
 
-      if (expression.length !== 1) {
+      if (filter.length !== 1) {
         throw new Error(
-          `INVARIANT: Expected 1 expression, but got ${expression.length};`
+          `INVARIANT: Expected 1 filter, but got ${filter.length};`
         );
       }
 
-      yard.tracks.precedenceGroup.push(expression[0]);
+      yard.tracks.precedenceGroup.push(filter[0]);
       break;
   }
 

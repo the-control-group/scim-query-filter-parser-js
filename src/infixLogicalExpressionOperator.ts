@@ -13,7 +13,9 @@ export function infixLogicalExpressionOperator(
       break;
 
     case ids.SEM_POST:
-      const op = utils.charsToString(chars, phraseIndex, phraseLength, yard);
+      const op = utils
+        .charsToString(chars, phraseIndex, phraseLength, yard)
+        .toLowerCase();
       if (op !== "and" && op !== "or") {
         throw new Error(
           `INVARIANT: No such infix logical expression operator \`${op}\`.`

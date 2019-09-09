@@ -21,7 +21,9 @@ export function prefixLogicalExpressionOperator(
       break;
 
     case ids.SEM_POST:
-      const op = utils.charsToString(chars, phraseIndex, phraseLength, yard);
+      const op = utils
+        .charsToString(chars, phraseIndex, phraseLength, yard)
+        .toLowerCase();
       const fn = map[op as keyof typeof map];
       if (!fn) {
         throw new Error(

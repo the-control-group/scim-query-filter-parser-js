@@ -15,7 +15,7 @@ export function attributeGroup(
       break;
 
     case ids.SEM_POST:
-      const { attributePath, expression } = yard.post("attributeGroup");
+      const { attributePath, filter } = yard.post("attributeGroup");
 
       if (attributePath.length !== 1) {
         throw new Error(
@@ -23,14 +23,16 @@ export function attributeGroup(
         );
       }
 
-      if (expression.length !== 1) {
+      if (filter.length !== 1) {
         throw new Error(
-          `INVARIANT: Expected 1 expression, but got ${expression.length};`
+          `INVARIANT: Expected 1 filter, but got ${filter.length};`
         );
       }
 
       yard.tracks.attributeGroup.push((data: any) =>
-        expression[0](traverse(attributePath[0], data))
+        traverse(attributePath[0], data).some(x =>
+          Array.isArray(x) ? x.some(y => filter[0](y)) : filter[0](x)
+        )
       );
 
       break;

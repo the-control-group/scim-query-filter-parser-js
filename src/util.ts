@@ -1,19 +1,27 @@
-export function traverse(path: string[], resource: any): unknown {
-  let cursor: any = resource;
-  for (let i = 0; i < path.length; i++) {
-    if (typeof cursor !== "object" || !cursor) {
-      return undefined;
-    }
-
-    // Do a case-insensitive lookup of keys.
-    const segment = path[i].toLowerCase();
-    const key = Object.keys(cursor).find(key => key.toLowerCase() === segment);
-    if (key == undefined) {
-      return undefined;
-    }
-
-    cursor = cursor[key];
+export function traverse(path: string[], resource: any): unknown[] {
+  if (typeof resource !== "object" || !resource) {
+    return [];
   }
 
-  return cursor;
+  if (Array.isArray(resource)) {
+    return resource
+      .map(resource => traverse(path, resource))
+      .reduce((l, r) => [...l, ...r]);
+  }
+
+  const [segment, ...remaining] = path;
+  const key = Object.keys(resource).find(
+    key => segment.localeCompare(key, undefined, { sensitivity: "base" }) === 0
+  );
+
+  if (key === undefined) {
+    return [];
+  }
+
+  const value = resource[key];
+  if (remaining.length) {
+    return traverse(remaining, value);
+  }
+
+  return [value];
 }
