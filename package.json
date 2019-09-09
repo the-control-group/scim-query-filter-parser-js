@@ -9,7 +9,8 @@
     "build": "rm -rf dist && tsc",
     "build:development": "rm -rf dist && tsc --watch",
     "test": "ava --verbose dist/*.test.js",
-    "test:development": "ava --verbose --watch dist/**/*.test.js"
+    "test:development": "ava --verbose --watch dist/**/*.test.js",
+    "prepare": "yarn build"
   },
   "repository": {
     "type": "git",
