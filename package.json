@@ -1,6 +1,6 @@
 {
   "name": "scim-query-filter-parser",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Parser for SCIM Filter Query Strings",
   "main": "index.js",
   "scripts": {
@@ -45,5 +45,6 @@
   },
   "dependencies": {
     "apg-lib": "^3.2.0"
-  }
+  },
+  "types": "dist/index.d.ts"
 }
