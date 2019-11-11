@@ -10,12 +10,12 @@ class TrackMap {
     e: Expression,
     data: any
   ) => boolean)[];
-  infixLogicalExpression = [] as (Expression)[];
-  infixLogicalExpressionPredicate = [] as (["and" | "or", Expression])[];
+  infixLogicalExpression = [] as Expression[];
+  infixLogicalExpressionPredicate = [] as ["and" | "or", Expression][];
   infixLogicalExpressionOperator = [] as ("and" | "or")[];
-  postfixAssertion = [] as (Expression)[];
+  postfixAssertion = [] as Expression[];
   postfixAssertionOperator = [] as ((path: string[], data: any) => boolean)[];
-  infixAssertion = [] as (Expression)[];
+  infixAssertion = [] as Expression[];
   infixAssertionOperator = [] as ((
     path: string[],
     value: any,
@@ -70,13 +70,10 @@ export class Yard {
 
   public pre(identifier: keyof TrackMap): void {
     this.stats[identifier].push(
-      (Object.keys(this.tracks) as (keyof TrackMap)[]).reduce(
-        (acc, k) => {
-          acc[k] = this.tracks[k].length;
-          return acc;
-        },
-        {} as Stat
-      )
+      (Object.keys(this.tracks) as (keyof TrackMap)[]).reduce((acc, k) => {
+        acc[k] = this.tracks[k].length;
+        return acc;
+      }, {} as Stat)
     );
   }
 

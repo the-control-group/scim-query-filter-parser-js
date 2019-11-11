@@ -1,4 +1,4 @@
-import { ids, utils } from "apg-lib";
+import { ids } from "apg-lib";
 import { Yard } from "./Yard";
 
 export function infixLogicalExpressionPredicate(
