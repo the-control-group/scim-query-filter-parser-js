@@ -1,3 +1,4 @@
+const collator = new Intl.Collator(undefined, { sensitivity: "base" });
 export function traverse(path: string[], resource: any): unknown[] {
   if (typeof resource !== "object" || !resource) {
     return [];
@@ -11,7 +12,7 @@ export function traverse(path: string[], resource: any): unknown[] {
 
   const [segment, ...remaining] = path;
   const key = Object.keys(resource).find(
-    key => segment.localeCompare(key, undefined, { sensitivity: "base" }) === 0
+    key => collator.compare(segment, key) === 0
   );
 
   if (key === undefined) {
