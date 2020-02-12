@@ -1,7 +1,7 @@
 {
   "name": "scim-query-filter-parser",
   "version": "2.0.4",
-  "description": "Parser for SCIM Filter Query Strings",
+  "description": "Parser for SCIM V2 filters and paths",
   "main": "dist/index.js",
   "scripts": {
     "format": "prettier --list-different --write '**/*.{json,yml,md,ts}'",
@@ -21,7 +21,12 @@
     "scim",
     "scimplecloud",
     "parser",
-    "filter"
+    "filter",
+    "path",
+    "patch",
+    "scimv2",
+    "rfc7644",
+    "rfc7643"
   ],
   "author": "Mike Marcacci <mike.marcacci@thecontrolgroup.com>",
   "license": "MIT",
