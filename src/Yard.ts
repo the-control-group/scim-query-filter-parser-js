@@ -24,6 +24,7 @@ class TrackMap {
   infixAssertionValue = [] as (null | boolean | number | string)[];
   attributePath = [] as string[][];
   attributePathSegment = [] as string[];
+  uri = [] as string[];
 }
 
 class Stat {
@@ -43,6 +44,7 @@ class Stat {
   infixAssertionValue = 0 as number;
   attributePath = 0 as number;
   attributePathSegment = 0 as number;
+  uri = 0 as number;
 }
 
 class StatsMap {
@@ -62,6 +64,7 @@ class StatsMap {
   infixAssertionValue = [] as Stat[];
   attributePath = [] as Stat[];
   attributePathSegment = [] as Stat[];
+  uri = [] as Stat[];
 }
 
 export class Yard {

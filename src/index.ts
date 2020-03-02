@@ -19,6 +19,7 @@ import { infixAssertionOperator } from "./infixAssertionOperator";
 import { infixAssertionValue } from "./infixAssertionValue";
 import { attributePath } from "./attributePath";
 import { attributePathSegment } from "./attributePathSegment";
+import { uri } from "./uri";
 
 const grammar = new Grammar();
 const parser = new Parser();
@@ -39,7 +40,8 @@ parser.ast.callbacks = {
   infixAssertionOperator,
   infixAssertionValue,
   attributePath,
-  attributePathSegment
+  attributePathSegment,
+  uri
 };
 
 export function compileFilter(input: string): (data: any) => boolean {
