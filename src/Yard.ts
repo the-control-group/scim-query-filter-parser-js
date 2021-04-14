@@ -1,10 +1,23 @@
-type Expression = (data: any) => boolean;
+export type Expression = (data: any) => boolean;
+
+export type SimplePath = {
+  path: string;
+  filter: null;
+  subpath: null;
+};
+
+export type FilterPath = {
+  path: string;
+  filter: Expression;
+  subpath: string | null;
+};
 
 class TrackMap {
   filter = [] as Expression[];
+  patchPath = [] as (SimplePath | FilterPath)[];
   expression = [] as Expression[];
   precedenceGroup = [] as Expression[];
-  attributeGroup = [] as Expression[];
+  attributeGroup = [] as [string[][], Expression][];
   prefixLogicalExpression = [] as Expression[];
   prefixLogicalExpressionOperator = [] as ((
     e: Expression,
@@ -28,6 +41,7 @@ class TrackMap {
 
 class Stat {
   filter = 0 as number;
+  patchPath = 0 as number;
   expression = 0 as number;
   precedenceGroup = 0 as number;
   attributeGroup = 0 as number;
@@ -47,6 +61,7 @@ class Stat {
 
 class StatsMap {
   filter = [] as Stat[];
+  patchPath = [] as Stat[];
   expression = [] as Stat[];
   precedenceGroup = [] as Stat[];
   attributeGroup = [] as Stat[];

@@ -5,6 +5,7 @@ import { Yard } from "./Yard";
 import { extractSortValue } from "./util";
 
 import { filter } from "./filter";
+import { patchPath } from "./patchPath";
 import { expression } from "./expression";
 import { precedenceGroup } from "./precedenceGroup";
 import { attributeGroup } from "./attributeGroup";
@@ -24,8 +25,22 @@ const grammar = new Grammar();
 const parser = new Parser();
 parser.ast = new Ast();
 
+type Expression = (data: any) => boolean;
+type SimplePath = {
+  path: string;
+  filter: null;
+  subpath: null;
+};
+
+type FilterPath = {
+  path: string;
+  filter: Expression;
+  subpath: string | null;
+};
+
 parser.ast.callbacks = {
   filter,
+  patchPath,
   expression,
   precedenceGroup,
   attributeGroup,
@@ -41,6 +56,26 @@ parser.ast.callbacks = {
   attributePath,
   attributePathSegment
 };
+
+export function compilePath(input: string): SimplePath | FilterPath {
+  // Parse the patchPath
+  const parseResult = parser.parse(grammar, "patchPath", input);
+  if (!parseResult.success) {
+    throw new Error("Failed to parse!");
+  }
+
+  // Compile the patchPath
+  const yard = new Yard();
+  parser.ast.translate(yard);
+
+  if (yard.tracks.patchPath.length !== 1) {
+    throw new Error(
+      `INVARIANT: Expected 1 patchPath, but got ${yard.tracks.patchPath.length};`
+    );
+  }
+
+  return yard.tracks.patchPath[0];
+}
 
 export function compileFilter(input: string): (data: any) => boolean {
   // Parse the filter
