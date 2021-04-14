@@ -20,7 +20,7 @@ infixAssertion = attributePath SP infixAssertionOperator SP infixAssertionValue
 infixAssertionOperator = "eq" / "ne" / "co" / "sw" / "ew" / "gt" / "lt" / "ge" / "le"
 infixAssertionValue = null / true / false / number / string
 
-attributePath = [URI ":"] attributePathSegment *("." attributePathSegment)
+attributePath = [URI "<"] attributePathSegment *1("." attributePathSegment)
 attributePathSegment  = ALPHA *("-" / "_" / DIGIT / ALPHA)
 
 ; rfc7159
