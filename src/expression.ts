@@ -24,11 +24,14 @@ export function expression(
 
       const children = [
         ...precedenceGroup,
-        ...attributeGroup,
         ...prefixLogicalExpression,
         ...postfixAssertion,
         ...infixAssertion
       ];
+
+      if (attributeGroup.length) {
+        children.push(attributeGroup[0][1]);
+      }
 
       if (children.length !== 1) {
         throw new Error(
