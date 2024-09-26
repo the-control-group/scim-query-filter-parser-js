@@ -218,9 +218,9 @@ module.exports = function(){
   this.rules[14].opcodes[1] = {type: 3, min: 0, max: 1};// REP
   this.rules[14].opcodes[2] = {type: 2, children: [3,4]};// CAT
   this.rules[14].opcodes[3] = {type: 4, index: 34};// RNM(URI)
-  this.rules[14].opcodes[4] = {type: 7, string: [58]};// TLS
+  this.rules[14].opcodes[4] = {type: 7, string: [60]};// TLS
   this.rules[14].opcodes[5] = {type: 4, index: 15};// RNM(attributePathSegment)
-  this.rules[14].opcodes[6] = {type: 3, min: 0, max: Infinity};// REP
+  this.rules[14].opcodes[6] = {type: 3, min: 0, max: 1};// REP
   this.rules[14].opcodes[7] = {type: 2, children: [8,9]};// CAT
   this.rules[14].opcodes[8] = {type: 7, string: [46]};// TLS
   this.rules[14].opcodes[9] = {type: 4, index: 15};// RNM(attributePathSegment)
@@ -831,7 +831,7 @@ module.exports = function(){
     str += "infixAssertionOperator = \"eq\" / \"ne\" / \"co\" / \"sw\" / \"ew\" / \"gt\" / \"lt\" / \"ge\" / \"le\"\n";
     str += "infixAssertionValue = null / true / false / number / string\n";
     str += "\n";
-    str += "attributePath = [URI \":\"] attributePathSegment *(\".\" attributePathSegment)\n";
+    str += "attributePath = [URI \"<\"] attributePathSegment *1(\".\" attributePathSegment)\n";
     str += "attributePathSegment  = ALPHA *(\"-\" / \"_\" / DIGIT / ALPHA)\n";
     str += "\n";
     str += "; rfc7159\n";

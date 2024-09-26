@@ -19,6 +19,7 @@ import { infixAssertionOperator } from "./infixAssertionOperator";
 import { infixAssertionValue } from "./infixAssertionValue";
 import { attributePath } from "./attributePath";
 import { attributePathSegment } from "./attributePathSegment";
+import { uri } from "./uri";
 
 const grammar = new Grammar();
 const parser = new Parser();
@@ -39,7 +40,8 @@ parser.ast.callbacks = {
   infixAssertionOperator,
   infixAssertionValue,
   attributePath,
-  attributePathSegment
+  attributePathSegment,
+  uri
 };
 
 export function compileFilter(input: string): (data: any) => boolean {
@@ -63,6 +65,10 @@ export function compileFilter(input: string): (data: any) => boolean {
 }
 
 export function parseAttributePath(input: string): string[] {
+  // TODO -- sanitize `input` such that the last occurrence of ":" is replaced with a "<"
+  //   e.g. "my:urn:here:some.attrPath" -> "my:urn:here<some.attrPath"
+  // This is hacky, but would allow us to support parsing URIs from attributePaths.
+
   // Parse the attributePath
   const parseResult = parser.parse(grammar, "attributePath", input);
   if (!parseResult.success) {
