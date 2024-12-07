@@ -1,5 +1,5 @@
 import test from "ava";
-import { compileFilter, compileSorter } from "./index";
+import { compileFilter, compileSorter, compilePath } from "./index";
 
 // Specification and examples are defined here:
 // https://tools.ietf.org/html/rfc7644#section-3.4.2.2
@@ -298,4 +298,39 @@ test("compileSorter() - ", t => {
     results.map(({ id }) => id),
     [2, 1, 3, 5, 10, 4, 6, 8, 9, 7]
   );
+});
+
+test("compilePath() - extracts path", t => {
+  const pathPath = compilePath(
+    "some.nestedMultiValuedField[type eq 5].subField"
+  );
+  t.is(pathPath.path, "some.nestedMultiValuedField");
+});
+
+test("compilePath() - extracts subpaths", t => {
+  const pathPath = compilePath(
+    "some.nestedMultiValuedField[type eq 5].subField"
+  );
+  t.is(pathPath.subpath, "subField");
+});
+
+test("compilePath() - does not extract non-existent subpaths", t => {
+  const pathPath = compilePath("someTopLevelField");
+  t.is(pathPath.subpath, null);
+});
+test("compilePath() - does not extract non-existent subpaths with filters", t => {
+  const pathPath = compilePath("someTopLevelField.something[type eq 5]");
+  t.is(pathPath.subpath, null);
+});
+
+test("compilePath() - does not extract non-existent filter if there is no filter", t => {
+  const pathPath = compilePath(
+    "some.nestedMultiValuedField[type eq 5].subField"
+  );
+  t.is(typeof pathPath.filter, "function");
+});
+
+test("compilePath() - does not extract non-existent filter", t => {
+  const pathPath = compilePath("some.subField");
+  t.is(pathPath.filter, null);
 });
